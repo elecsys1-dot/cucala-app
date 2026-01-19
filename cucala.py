@@ -1,73 +1,54 @@
 import streamlit as st
-import pandas as pd
-from datetime import datetime
 
-# Configuración de la página
-st.set_page_config(page_title="AI Cucala Tecnics", page_icon="⚙️")
+# 1. Configuración básica (DEBE ser la primera línea de Streamlit)
+st.set_page_config(page_title="AI Cucala Tecnics", layout="centered")
 
-# Estilo para el botón de pánico (Rojo y Grande)
-st.markdown("""
-    <style>
-    .stButton>button { width: 100%; border-radius: 10px; height: 3em; font-weight: bold; }
-    .panic-btn { background-color: #ff4b4b !important; color: white !important; }
-    </style>
-    """, unsafe_allow_html=True)
+# 2. Título principal siempre visible
+st.title("🛠️ AI Cucala Tecnics")
 
-# --- MENÚ LATERAL ---
-menu = st.sidebar.selectbox("Menú", ["Inicio", "Botón de Pánico", "Presupuestos", "Informes Técnicos"])
+# 3. Menú de navegación sencillo
+opcion = st.radio("Selecciona una función:", 
+                 ["Inicio", "🚨 BOTÓN DE PÁNICO", "📋 Presupuestos", "📝 Informes Técnicos"],
+                 horizontal=True)
 
-# --- INICIO ---
-if menu == "Inicio":
-    st.image("logo.png", width=120) # Asegúrate de que tu logo se llame así
-    st.title("AI Cucala Tecnics")
-    st.write("Bienvenido al sistema de gestión técnica.")
+st.divider() # Una línea de separación
 
-# --- BOTÓN DE PÁNICO ---
-elif menu == "Botón de Pánico":
-    st.header("🚨 Asistencia de Emergencia")
-    nombre_tec = st.text_input("Tu Nombre/ID de Técnico")
-    
-    if st.button("SOLICITAR ASISTENCIA AHORA", help="Se enviará aviso con tu ubicación y fotos"):
-        if nombre_tec:
-            st.error(f"¡ALERTA ENVIADA! Técnico: {nombre_tec}")
-            # Aquí la app solicita acceso a la cámara para la evidencia
-            foto_emergencia = st.camera_input("Captura de la situación")
-            st.info("Buscando coordenadas GPS... (Activa el GPS de tu móvil)")
-            # En una WebApp, el navegador pedirá permiso de ubicación automáticamente
+# --- LÓGICA DE LAS SECCIONES ---
+
+if opcion == "Inicio":
+    st.subheader("Bienvenido al sistema")
+    st.write("Selecciona una opción arriba para empezar.")
+    st.info("App gestionada por IA Cucala")
+
+elif opcion == "🚨 BOTÓN DE PÁNICO":
+    st.header("ASISTENCIA INMEDIATA")
+    nombre = st.text_input("Nombre del técnico")
+    if st.button("ENVIAR ALERTA URGENTE", type="primary"):
+        if nombre:
+            st.error(f"¡ALERTA ENVIADA! Técnico {nombre} en apuros.")
+            st.camera_input("Captura de pantalla/entorno")
+            # Aquí la app pedirá permiso de cámara al usuario
         else:
-            st.warning("Por favor, pon tu nombre para saber quién eres.")
+            st.warning("Introduce tu nombre antes de enviar.")
 
-# --- PRESUPUESTOS ---
-elif menu == "Presupuestos":
-    st.header("📋 Solicitud de Presupuesto")
-    
-    with st.form("form_presupuesto"):
-        cliente = st.text_input("Nombre del Cliente")
-        servicio = st.selectbox("Tipo de Servicio", ["Instalación", "Reparación", "Mantenimiento", "Otro"])
-        detalles = st.text_area("Detalles del trabajo")
+elif opcion == "📋 Presupuestos":
+    st.header("Solicitud de Presupuesto")
+    with st.form("presupuesto"):
+        cliente = st.text_input("Cliente")
+        trabajo = st.text_area("Descripción del trabajo")
+        metodo = st.radio("Enviar por:", ["Telegram", "Llamada"])
         
-        col1, col2 = st.columns(2)
-        with col1:
-            enviar_telegram = st.form_submit_button("Enviar por Telegram")
-        with col2:
-            st.markdown("[📞 Llamar para Consultar](tel:+34600000000)") # Pon tu número aquí
-            
-        if enviar_telegram:
-            st.success(f"Datos de {cliente} preparados para enviar al centro de control.")
+        if st.form_submit_button("Procesar"):
+            if metodo == "Llamada":
+                st.markdown("[📞 PULSA AQUÍ PARA LLAMAR](tel:+34600000000)")
+            else:
+                st.success("Enviando datos a Telegram...")
 
-# --- INFORMES TÉCNICOS ---
-elif menu == "Informes Técnicos":
-    st.header("📝 Generar Informe de Trabajo")
-    with st.form("informe_tecnico"):
-        fecha = st.date_input("Fecha", datetime.now())
-        descripcion = st.text_area("Trabajo realizado")
-        materiales = st.text_area("Materiales utilizados")
-        
-        st.write("### Evidencia Visual")
-        foto_antes = st.camera_input("Foto ANTES")
-        foto_despues = st.camera_input("Foto DESPUÉS")
-        
-        if st.form_submit_button("Finalizar y Guardar Informe"):
-            st.balloons()
-            st.success("Informe guardado localmente. Generando PDF...")
-
+elif opcion == "📝 Informes Técnicos":
+    st.header("Nuevo Informe")
+    st.write("Registra el trabajo realizado:")
+    st.camera_input("Foto del trabajo")
+    st.text_area("Observaciones")
+    if st.button("Guardar Informe"):
+        st.balloons()
+        st.success("Informe registrado correctamente.")
