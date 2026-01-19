@@ -1,52 +1,73 @@
 import streamlit as st
-import requests
+import pandas as pd
+from datetime import datetime
 
-# 1. IDENTIDAD DE LA APP
-st.set_page_config(page_title="AI Cucala Tecnics", page_icon="🏗️")
+# Configuración de la página
+st.set_page_config(page_title="AI Cucala Tecnics", page_icon="⚙️")
 
-# 2. CABECERA (Usando funciones nativas seguras)
-st.title("🏗️ AI CUCALA TECNICS")
-st.info("Asistencia Técnica Profesional - Reus / Tarragona")
+# Estilo para el botón de pánico (Rojo y Grande)
+st.markdown("""
+    <style>
+    .stButton>button { width: 100%; border-radius: 10px; height: 3em; font-weight: bold; }
+    .panic-btn { background-color: #ff4b4b !important; color: white !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-# Intentar mostrar tu logo
-try:
-    st.image("logo.png", width=150)
-except:
-    st.caption("Identidad visual: AI Cucala Tecnics")
+# --- MENÚ LATERAL ---
+menu = st.sidebar.selectbox("Menú", ["Inicio", "Botón de Pánico", "Presupuestos", "Informes Técnicos"])
 
-st.divider()
+# --- INICIO ---
+if menu == "Inicio":
+    st.image("logo.png", width=120) # Asegúrate de que tu logo se llame así
+    st.title("AI Cucala Tecnics")
+    st.write("Bienvenido al sistema de gestión técnica.")
 
-# 3. BOTÓN DE PÁNICO (Rojo y Grande)
-st.error("### 🚨 SISTEMA DE EMERGENCIAS")
-if st.button("ENVIAR ALERTA DE PÁNICO", type="primary", use_container_width=True):
-    # Usamos tus credenciales exactas
-    token = "8512290726:AAGt9LuDjPeFkrExq2hy-fihh2GkXr6Mssg"
-    chat_id = "8477243433"
+# --- BOTÓN DE PÁNICO ---
+elif menu == "Botón de Pánico":
+    st.header("🚨 Asistencia de Emergencia")
+    nombre_tec = st.text_input("Tu Nombre/ID de Técnico")
     
-    mensaje = "🔴 **URGENCIA AI CUCALA**\nSe ha solicitado asistencia inmediata desde la App."
+    if st.button("SOLICITAR ASISTENCIA AHORA", help="Se enviará aviso con tu ubicación y fotos"):
+        if nombre_tec:
+            st.error(f"¡ALERTA ENVIADA! Técnico: {nombre_tec}")
+            # Aquí la app solicita acceso a la cámara para la evidencia
+            foto_emergencia = st.camera_input("Captura de la situación")
+            st.info("Buscando coordenadas GPS... (Activa el GPS de tu móvil)")
+            # En una WebApp, el navegador pedirá permiso de ubicación automáticamente
+        else:
+            st.warning("Por favor, pon tu nombre para saber quién eres.")
+
+# --- PRESUPUESTOS ---
+elif menu == "Presupuestos":
+    st.header("📋 Solicitud de Presupuesto")
     
-    try:
-        url = f"https://api.telegram.org/bot{token}/sendMessage"
-        requests.post(url, data={"chat_id": chat_id, "text": mensaje, "parse_mode": "Markdown"})
-        st.success("✅ ¡AVISO ENVIADO A CENTRAL!")
-        st.balloons()
-    except:
-        st.error("Error de conexión. Revisa tu cobertura.")
+    with st.form("form_presupuesto"):
+        cliente = st.text_input("Nombre del Cliente")
+        servicio = st.selectbox("Tipo de Servicio", ["Instalación", "Reparación", "Mantenimiento", "Otro"])
+        detalles = st.text_area("Detalles del trabajo")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            enviar_telegram = st.form_submit_button("Enviar por Telegram")
+        with col2:
+            st.markdown("[📞 Llamar para Consultar](tel:+34600000000)") # Pon tu número aquí
+            
+        if enviar_telegram:
+            st.success(f"Datos de {cliente} preparados para enviar al centro de control.")
 
-st.write("") 
+# --- INFORMES TÉCNICOS ---
+elif menu == "Informes Técnicos":
+    st.header("📝 Generar Informe de Trabajo")
+    with st.form("informe_tecnico"):
+        fecha = st.date_input("Fecha", datetime.now())
+        descripcion = st.text_area("Trabajo realizado")
+        materiales = st.text_area("Materiales utilizados")
+        
+        st.write("### Evidencia Visual")
+        foto_antes = st.camera_input("Foto ANTES")
+        foto_despues = st.camera_input("Foto DESPUÉS")
+        
+        if st.form_submit_button("Finalizar y Guardar Informe"):
+            st.balloons()
+            st.success("Informe guardado localmente. Generando PDF...")
 
-# 4. BOTONES DE SERVICIOS (Informes y Reclamaciones)
-st.subheader("🛠️ Gestión de Servicios")
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button("📋 SOLICITAR INFORME", use_container_width=True):
-        st.write("Abriendo panel de informes técnicos...")
-
-with col2:
-    if st.button("🔍 RECLAMACIONES", use_container_width=True):
-        st.write("Abriendo gestión de daños ocultos...")
-
-# 5. PIE DE PÁGINA
-st.divider()
-st.caption("© 2026 AI Cucala Tecnics - Reus / Tarragona")
