@@ -2,67 +2,45 @@ import streamlit as st
 import requests
 from PIL import Image
 
-# Configuración de la App
+# 1. CONFIGURACIÓN BÁSICA
 st.set_page_config(page_title="AI Cucala Tecnics", page_icon="🤖", layout="centered")
 
-# Estilo Negro y Neón (Como la imagen que te gusta)
-st.markdown("""
-    <style>
-    .stApp { background-color: #0e1117; color: white; }
-    
-    /* Botón de Pánico Gigante */
-    .stButton>button {
-        width: 100%;
-        height: 250px;
-        border-radius: 30px;
-        background: linear-gradient(145deg, #ff4b4b, #8b0000);
-        color: white;
-        font-size: 40px;
-        font-weight: bold;
-        border: 4px solid #ffffff33;
-        box-shadow: 0px 15px 30px rgba(255, 75, 75, 0.4);
-    }
-    
-    /* Botones Secundarios */
-    .sec-btn>div>button {
-        height: 80px;
-        font-size: 16px;
-        background-color: #1f2937;
-    }
-    </style>
-    <h2 style='text-align: center; color: #00d4ff;'>AI Cucala Tecnics</h2>
-    <p style='text-align: center; opacity: 0.8;'>Tu asistente inteligente de oficina y hogar</p>
-    """, unsafe_allow_index=True)
+# 2. DISEÑO VISUAL CORREGIDO
+st.markdown("<h1 style='text-align: center; color: #3b82f6;'>AI CUCALA TECNICS</h1>", unsafe_allow_index=True)
+st.markdown("<p style='text-align: center;'>Tu asistente inteligente de oficina y hogar</p>", unsafe_allow_index=True)
 
-# Cargar el logo que acabas de subir
+# 3. CARGAR EL LOGO
 try:
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        st.image("logo.png", use_container_width=True)
+    # Usamos el archivo que ya tienes en GitHub
+    st.image("logo.png", width=200)
 except:
     st.write("Cargando logo...")
 
-st.markdown("<br>", unsafe_allow_index=True)
-
-# EL GRAN BOTÓN DE PÁNICO
-if st.button("🚨 BOTÓN DE PÁNICO"):
+# 4. BOTÓN DE PÁNICO GIGANTE
+st.write("---")
+if st.button("🚨 BOTÓN DE PÁNICO", use_container_width=True):
+    # Recuperamos tus secretos guardados
     token = st.secrets["TELEGRAM_TOKEN"]
     chat_id = st.secrets["TELEGRAM_CHAT_ID"]
-    texto = "⚠️ **¡ALERTA DE EMERGENCIA TÉCNICA!** ⚠️\nSe requiere asistencia inmediata en Tarragona/Reus."
+    
+    mensaje = "⚠️ **¡ALERTA DE EMERGENCIA TÉCNICA!** ⚠️\nSe requiere asistencia inmediata."
     
     try:
-        requests.post(f"https://api.telegram.org/bot{token}/sendMessage", 
-                      data={"chat_id": chat_id, "text": texto, "parse_mode": "Markdown"})
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        requests.post(url, data={"chat_id": chat_id, "text": mensaje, "parse_mode": "Markdown"})
         st.error("¡EMERGENCIA ENVIADA! La central ha sido notificada.")
         st.balloons()
     except:
-        st.error("Error al conectar con la central.")
+        st.error("Error al enviar el aviso.")
 
-# Botones de servicios
-col_a, col_b = st.columns(2)
-with col_a:
-    st.button("📋 SOLICITAR INFORME", key="inf")
-with col_b:
-    st.button("🔍 RECLAMACIONES", key="rec")
+# 5. OTROS SERVICIOS
+st.write("---")
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("📋 SOLICITAR INFORME", use_container_width=True):
+        st.info("Función de informes seleccionada.")
+with col2:
+    if st.button("🔍 RECLAMACIONES", use_container_width=True):
+        st.warning("Área de reclamaciones técnica.")
 
-st.markdown("<p style='text-align:center; margin-top:50px;'>📍 Tarragona, Reus y alrededores</p>", unsafe_allow_index=True)
+st.markdown("<br><p style='text-align:center; color:gray;'>📍 Tarragona, Reus y alrededores</p>", unsafe_allow_index=True)
