@@ -2,75 +2,67 @@ import streamlit as st
 import requests
 from PIL import Image
 
-# Configuración de estilo Android Moderno
-st.set_page_config(page_title="AI Cucala Tecnics", page_icon="🏗️", layout="centered")
+# Configuración de la App
+st.set_page_config(page_title="AI Cucala Tecnics", page_icon="🤖", layout="centered")
 
+# Estilo Negro y Neón (Como la imagen que te gusta)
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; color: white; }
-    .stApp { background: #0e1117; }
+    .stApp { background-color: #0e1117; color: white; }
     
-    /* Contenedor del Título */
-    .header-style {
-        text-align: center;
-        padding: 20px;
-        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-        border-radius: 15px;
-        margin-bottom: 25px;
-    }
-
-    /* Botón de Pánico Estilo App */
+    /* Botón de Pánico Gigante */
     .stButton>button {
         width: 100%;
-        height: 150px;
-        border-radius: 25px;
-        background-color: #ff4b4b;
+        height: 250px;
+        border-radius: 30px;
+        background: linear-gradient(145deg, #ff4b4b, #8b0000);
         color: white;
-        font-size: 28px;
+        font-size: 40px;
         font-weight: bold;
-        border: 5px solid #ffffff33;
-        box-shadow: 0px 10px 20px rgba(255, 75, 75, 0.4);
-        text-transform: uppercase;
+        border: 4px solid #ffffff33;
+        box-shadow: 0px 15px 30px rgba(255, 75, 75, 0.4);
     }
     
-    /* Estilo para los otros botones */
-    .secondary-btn {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
+    /* Botones Secundarios */
+    .sec-btn>div>button {
+        height: 80px;
+        font-size: 16px;
+        background-color: #1f2937;
     }
     </style>
-    
-    <div class="header-style">
-        <h1 style='color: white; margin:0;'>AI CUCALA TECNICS</h1>
-        <p style='color: #e0e0e0;'>Tu asistente inteligente de oficina y hogar</p>
-    </div>
+    <h2 style='text-align: center; color: #00d4ff;'>AI Cucala Tecnics</h2>
+    <p style='text-align: center; opacity: 0.8;'>Tu asistente inteligente de oficina y hogar</p>
     """, unsafe_allow_index=True)
 
-# Cargar Logo
+# Cargar el logo que acabas de subir
 try:
-    logo = Image.open("logo.png")
-    st.image(logo, width=150)
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        st.image("logo.png", use_container_width=True)
 except:
-    st.write("🔧 *Cargando Logo...*")
+    st.write("Cargando logo...")
 
-# BOTÓN DE PÁNICO (Principal)
-if st.button("🚨 BOTÓN DE PÁNICO 🚨"):
+st.markdown("<br>", unsafe_allow_index=True)
+
+# EL GRAN BOTÓN DE PÁNICO
+if st.button("🚨 BOTÓN DE PÁNICO"):
     token = st.secrets["TELEGRAM_TOKEN"]
     chat_id = st.secrets["TELEGRAM_CHAT_ID"]
-    texto = "⚠️ **¡ALERTA DE EMERGENCIA TÉCNICA!** ⚠️\nUn cliente necesita asistencia inmediata."
-    requests.post(f"https://api.telegram.org/bot{token}/sendMessage", data={"chat_id": chat_id, "text": texto, "parse_mode": "Markdown"})
-    st.error("¡EMERGENCIA ENVIADA! Estamos avisando a la central.")
-    st.balloons()
+    texto = "⚠️ **¡ALERTA DE EMERGENCIA TÉCNICA!** ⚠️\nSe requiere asistencia inmediata en Tarragona/Reus."
+    
+    try:
+        requests.post(f"https://api.telegram.org/bot{token}/sendMessage", 
+                      data={"chat_id": chat_id, "text": texto, "parse_mode": "Markdown"})
+        st.error("¡EMERGENCIA ENVIADA! La central ha sido notificada.")
+        st.balloons()
+    except:
+        st.error("Error al conectar con la central.")
 
-# Secciones secundarias
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("📋 SOLICITAR INFORME"):
-        st.info("Función de informes activada.")
-with col2:
-    if st.button("🔍 RECLAMACIONES"):
-        st.warning("Área de reclamaciones técnica.")
+# Botones de servicios
+col_a, col_b = st.columns(2)
+with col_a:
+    st.button("📋 SOLICITAR INFORME", key="inf")
+with col_b:
+    st.button("🔍 RECLAMACIONES", key="rec")
 
-st.markdown("---")
-st.write("📍 **Cobertura:** Tarragona, Reus y alrededores")
+st.markdown("<p style='text-align:center; margin-top:50px;'>📍 Tarragona, Reus y alrededores</p>", unsafe_allow_index=True)
