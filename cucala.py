@@ -2,78 +2,75 @@ import streamlit as st
 import requests
 from PIL import Image
 
-# 1. CONFIGURACIÓN DE LA PÁGINA
+# Configuración de estilo Android Moderno
 st.set_page_config(page_title="AI Cucala Tecnics", page_icon="🏗️", layout="centered")
 
-# 2. DISEÑO VISUAL (CSS)
 st.markdown("""
     <style>
-    .main { background-color: #f5f7f9; }
+    .main { background-color: #0e1117; color: white; }
+    .stApp { background: #0e1117; }
+    
+    /* Contenedor del Título */
+    .header-style {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+
+    /* Botón de Pánico Estilo App */
     .stButton>button {
         width: 100%;
-        border-radius: 20px;
-        height: 3em;
-        background-color: #FF4B4B;
+        height: 150px;
+        border-radius: 25px;
+        background-color: #ff4b4b;
         color: white;
+        font-size: 28px;
         font-weight: bold;
-        border: none;
+        border: 5px solid #ffffff33;
+        box-shadow: 0px 10px 20px rgba(255, 75, 75, 0.4);
+        text-transform: uppercase;
     }
-    .header-box {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        padding: 20px;
-        border-radius: 15px;
-        color: white;
-        text-align: center;
-        margin-bottom: 10px;
+    
+    /* Estilo para los otros botones */
+    .secondary-btn {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
     }
     </style>
-    <div class="header-box">
-        <h1>AI CUCALA TECNICS</h1>
-        <p>Gestión de Urgencias e Informes Periciales</p>
+    
+    <div class="header-style">
+        <h1 style='color: white; margin:0;'>AI CUCALA TECNICS</h1>
+        <p style='color: #e0e0e0;'>Tu asistente inteligente de oficina y hogar</p>
     </div>
     """, unsafe_allow_index=True)
 
-# 3. CARGAR EL LOGOTIPO QUE SUBISTE A GITHUB
+# Cargar Logo
 try:
-    imagen_logo = Image.open("logo.png")
-    # Esto centra la imagen del logo
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image(imagen_logo, use_container_width=True)
+    logo = Image.open("logo.png")
+    st.image(logo, width=150)
 except:
-    st.info("Sube el archivo 'logo.png' a tu GitHub para que aparezca aquí el logo.")
+    st.write("🔧 *Cargando Logo...*")
 
-# 4. RECUPERAR TUS CLAVES SECRETAS
-try:
+# BOTÓN DE PÁNICO (Principal)
+if st.button("🚨 BOTÓN DE PÁNICO 🚨"):
     token = st.secrets["TELEGRAM_TOKEN"]
     chat_id = st.secrets["TELEGRAM_CHAT_ID"]
-except:
-    st.error("Faltan las claves en la sección 'Secrets' de Streamlit.")
+    texto = "⚠️ **¡ALERTA DE EMERGENCIA TÉCNICA!** ⚠️\nUn cliente necesita asistencia inmediata."
+    requests.post(f"https://api.telegram.org/bot{token}/sendMessage", data={"chat_id": chat_id, "text": texto, "parse_mode": "Markdown"})
+    st.error("¡EMERGENCIA ENVIADA! Estamos avisando a la central.")
+    st.balloons()
 
-# 5. FORMULARIO DE LA APP
-st.markdown("---")
-nombre = st.text_input("👤 Nombre del Técnico / Cliente:")
-averia = st.text_area("📝 Describa la avería o siniestro:")
-foto = st.file_uploader("📸 Capturar Foto/Vídeo del daño", type=['png', 'jpg', 'jpeg', 'mp4'])
-
-# 6. LÓGICA DEL BOTÓN DE PÁNICO
-if st.button("🚨 ENVIAR EMERGENCIA AHORA"):
-    if nombre and averia:
-        mensaje = f"🔴 **NUEVA URGENCIA**\n\n**Técnico:** {nombre}\n**Avería:** {averia}"
-        url_tg = f"https://api.telegram.org/bot{token}/sendMessage"
-        payload = {"chat_id": chat_id, "text": mensaje, "parse_mode": "Markdown"}
-        
-        try:
-            res = requests.post(url_tg, data=payload)
-            if res.status_code == 200:
-                st.success("✅ ¡Aviso enviado! Ya estamos en camino.")
-                st.balloons()
-            else:
-                st.error("Error al conectar con Telegram.")
-        except:
-            st.error("Error en el envío.")
-    else:
-        st.warning("⚠️ Escribe tu nombre y la avería antes de enviar.")
+# Secciones secundarias
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("📋 SOLICITAR INFORME"):
+        st.info("Función de informes activada.")
+with col2:
+    if st.button("🔍 RECLAMACIONES"):
+        st.warning("Área de reclamaciones técnica.")
 
 st.markdown("---")
-st.caption("© 2026 AI Cucala Tecnics - Reus / Tarragona")
+st.write("📍 **Cobertura:** Tarragona, Reus y alrededores")
