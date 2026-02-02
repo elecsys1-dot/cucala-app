@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Técnicos Cucalá</title>
+    <style>
+        /* Fondo con gradiente profesional y toque tecnológico */
+        body {
+            background: radial-gradient(circle at center, #1e2a4a 0%, #0f0f1e 100%);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: space-around;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Logo adaptable */
+        .header {
+            text-align: center;
+            padding-top: 20px;
+        }
+        .logo-main {
+            font-size: clamp(24px, 6vw, 36px);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00d4ff;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Contenedor de botones */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(15px, 4vh, 25px);
+            border-radius: 16px;
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+
+        .btn:active { transform: scale(0.96); filter: brightness(1.2); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 212, 255, 0.2); }
+
+        .btn-red { background: linear-gradient(135deg, #ff416c, #ff4b2b); box-shadow: 0 8px 20px rgba(255, 65, 108, 0.3); }
+        .btn-orange { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a1a; }
+        .btn-purple { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+
+        .footer {
+            font-size: 14px;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+
+        .icon { margin-right: 12px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-main">⚡ AI CUCALÁ</div>
+        <p style="color: #00d4ff; font-weight: 300; margin-top: 5px;">Servicios Técnicos</p>
+    </div>
+
+    <div class="container">
+        <a href="tel:686843069" class="btn btn-red">
+            <span class="icon">📞</span> EMERGENCIAS 24H
+        </a>
+        
+        <a href="https://wa.me/34686843069?text=Hola, quiero solicitar un presupuesto" class="btn btn-orange">
+            <span class="icon">📋</span> PRESUPUESTOS
+        </a>
+
+        <a href="#" class="btn btn-purple">
+            <span class="icon">🏷️</span> OFERTAS Y PROMOS
+        </a>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 AI Cucalá Tecnics v1.0
+    </div>
+
+</body>
+</html>
